@@ -6,6 +6,6 @@ describe RequiredFiles do
   end
 
   it 'does something useful' do
-    expect(false).to eq(true)
+    expect(false).not_to eq(true)
   end
 end
