@@ -22,8 +22,10 @@ Or install it yourself as:
 
 ## Usage
 
-  client = RequiredFiles::Client.new(YOUR_GITHUB_TOKEN)
-  client.copy_required_files
+```ruby
+client = RequiredFiles::Client.new(YOUR_GITHUB_TOKEN)
+client.copy_required_files
+```
 
 ## Development
 
