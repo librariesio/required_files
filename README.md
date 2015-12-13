@@ -1,8 +1,8 @@
 # RequiredFiles
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/required_files`. To experiment with that code, run `bin/console` for an interactive prompt.
+Ensure files like License.txt, CODE_OF_CONDUCT.md and CONTRIBUTING.md exist on all repos across a GitHub account.
 
-TODO: Delete this and the text above, and describe your gem
+Add all the files you'd like to replicate across all repos to a new repo called `required-files`
 
 ## Installation
 
@@ -22,7 +22,8 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+  client = RequiredFiles::Client.new(YOUR_GITHUB_TOKEN)
+  client.copy_required_files
 
 ## Development
 
