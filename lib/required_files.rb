@@ -11,7 +11,7 @@ module RequiredFiles
       Octokit::Client.new(access_token: @github_token)
     end
 
-    def run
+    def copy_required_files
       copy_files_for_account(github_client.user.login)
       find_orgs.each do |org|
         copy_files_for_account(org.login)
