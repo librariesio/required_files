@@ -34,6 +34,7 @@ module RequiredFiles
 
     def copy_files_for_account(user_or_org)
       required_files = find_required_files(user_or_org)
+      return if required_files.empty?
       repos = find_repos(user_or_org)
       repos.each do |repo|
         copy_files_to_repo(repo.full_name, required_files)
