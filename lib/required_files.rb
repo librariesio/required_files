@@ -1,4 +1,5 @@
 require "required_files/version"
+require 'octokit'
 
 module RequiredFiles
   class Client
@@ -7,7 +8,7 @@ module RequiredFiles
     end
 
     def github_client
-      Octokit::Client.new(access_token: github_token)
+      Octokit::Client.new(access_token: @github_token)
     end
 
     def run
@@ -28,35 +29,45 @@ module RequiredFiles
 
     def find_required_files(user_or_org)
       repo_name = "#{user_or_org}/required-files"
-      github_client.contents(repo_name)
+      required_files = get_file_list(repo_name, true)
     end
 
     def copy_files_for_account(user_or_org)
       required_files = find_required_files(user_or_org)
       repos = find_repos(user_or_org)
       repos.each do |repo|
-        copy_files_to_repo(repo, required_files)
+        copy_files_to_repo(repo.full_name, required_files)
       end
     end
 
     def copy_files_to_repo(repo, required_files)
-      file_list = github_client.contents(repo)
+      file_list = get_file_list(repo)
       required_files.each do |required_file|
         next if file_exists?(required_file, file_list)
         create_file(repo, required_file)
       end
     end
 
+    def get_file_list(repo, include_contents = false)
+      files = github_client.contents(repo).select{|f| f.type == 'file' }
+      if include_contents
+        files.map! do |file|
+          github_client.contents(repo, path: file.path)
+        end
+      else
+        files
+      end
+    end
+
     def file_exists?(required_file, file_list)
-      file_list.include?(required_file)
+      file_list.map(&:path).include?(required_file.path)
     end
 
     def create_file(repo, required_file)
-      Octokit.create_contents(repo,
-                              file_name,
-                              commit_message,
-                              file_contents,
-                              branch: branch_name)
+      github_client.create_contents(repo,
+                                    required_file.path,
+                                    "Adding #{required_file.path}",
+                                    Base64.decode64(required_file.content))
     end
   end
 end
