@@ -29,7 +29,7 @@ module RequiredFiles
 
     def find_required_files(user_or_org)
       repo_name = "#{user_or_org}/required-files"
-      required_files = get_file_list(repo_name, true)
+      get_file_list(repo_name, true)
     end
 
     def copy_files_for_account(user_or_org)
@@ -50,7 +50,7 @@ module RequiredFiles
     end
 
     def get_file_list(repo, include_contents = false)
-      files = github_client.contents(repo).select{|f| f.type == 'file' }
+      files = github_client.tree(repo, 'master', recursive: true)[:tree].select{|f| f.type == 'blob' }
       if include_contents
         files.map! do |file|
           github_client.contents(repo, path: file.path)
