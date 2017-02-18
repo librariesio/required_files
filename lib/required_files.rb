@@ -8,7 +8,7 @@ module RequiredFiles
     end
 
     def github_client
-      Octokit::Client.new(access_token: @github_token)
+      Octokit::Client.new(access_token: @github_token, auto_paginate: true)
     end
 
     def copy_required_files
