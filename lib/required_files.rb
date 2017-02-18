@@ -75,12 +75,12 @@ module RequiredFiles
       repos = find_repos(user_or_org)
       repos.each do |repo|
         file = get_file_list(repo).find{|f| f.path == file_path }
-        delete_file(repo, file)
+        delete_file(repo, file) if file
       end
     end
 
     def delete_file(repo, file)
-      Octokit.delete_contents(repo.full_name,
+      github_client.delete_contents(repo.full_name,
                  file.path,
                  "Deleting #{file.path}",
                  file.sha)
