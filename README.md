@@ -22,9 +22,28 @@ Or install it yourself as:
 
 ## Usage
 
+Initialize the client:
+
 ```ruby
 client = RequiredFiles::Client.new(YOUR_GITHUB_TOKEN)
-client.copy_required_files
+```
+
+Copy all files from a repo called `required-files` to all other repos owned by the account:
+
+```ruby
+client.copy_files_for_account('librariesio')
+```
+
+Delete a file from all other repos owned by the account:
+
+```ruby
+client.delete_file_for_account('librariesio', 'CONTRIBUTING.md')
+```
+
+Update a file in all repos owned by the account with one from repo called `required-files`:
+
+```ruby
+client.update_file_for_account('librariesio', '.github/CONTRIBUTING.md')
 ```
 
 ## Development
