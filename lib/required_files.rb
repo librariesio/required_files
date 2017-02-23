@@ -37,7 +37,7 @@ module RequiredFiles
       return if required_files.empty?
       repos = find_repos(user_or_org)
       repos.each do |repo|
-        copy_files_to_repo(repo.full_name, required_files)
+        copy_files_to_repo(repo, required_files)
       end
     end
 
@@ -65,7 +65,7 @@ module RequiredFiles
     end
 
     def create_file(repo, required_file)
-      github_client.create_contents(repo,
+      github_client.create_contents(repo.full_name,
                                     required_file.path,
                                     "Adding #{required_file.path}",
                                     Base64.decode64(required_file.content))
