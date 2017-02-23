@@ -71,6 +71,23 @@ module RequiredFiles
                                     Base64.decode64(required_file.content))
     end
 
+    def update_file_for_account(user_or_org, file_path)
+      repos = find_repos(user_or_org)
+      source_file = github_client.contents("#{user_or_org}/required-files", path: file_path)
+      repos.each do |repo|
+        file = get_file_list(repo).find{|f| f.path == file_path }
+        update_file(repo, file, source_file) if file
+      end
+    end
+
+    def update_file(repo, file, new_file)
+      github_client.update_contents(repo.full_name,
+                 file.path,
+                 "Updating #{file.path}",
+                 file.sha,
+                 Base64.decode64(new_file.content))
+    end
+
     def delete_file_for_account(user_or_org, file_path)
       repos = find_repos(user_or_org)
       repos.each do |repo|
