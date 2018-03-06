@@ -24,7 +24,7 @@ module RequiredFiles
 
     def find_repos(user_or_org)
       repos = github_client.repos(user_or_org)
-      repos.reject(&:fork?)
+      repos.reject(&:fork?).reject(&:archived?)
     end
 
     def find_required_files(user_or_org)
